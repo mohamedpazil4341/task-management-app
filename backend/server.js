@@ -9,7 +9,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const path = require('path');
+
 const dotenv = require('dotenv');
 
 // Load environment variables from .env file
@@ -67,17 +67,6 @@ app.use('/api/tasks', taskRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'TaskFlow API is running' });
 });
-
-// ---- Serve Frontend in Production ----
-if (process.env.NODE_ENV === 'production') {
-  // Serve static files from the React build folder
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  // For any route not matching an API route, serve the React app
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
 
 // ---- Error Handling ----
 app.use(notFound);
